@@ -108,12 +108,6 @@ export class AIGuardEvaluationEngine {
   ): Promise<tracer.aiguard.Evaluation | undefined> {
     const tag = this.#formatTag(kind, meta);
 
-    this.#logger.info(
-      "[AI Guard] Evaluating %s — %d message(s) sent to AI Guard",
-      tag,
-      messages.length,
-    );
-
     const start = performance.now();
     try {
       const result = await this.#evaluator.evaluate(messages, { block: true });
@@ -131,8 +125,6 @@ export class AIGuardEvaluationEngine {
           action,
           elapsed,
         );
-      } else {
-        this.#logger.info("[AI Guard] %s — allowed (%sms)", tag, elapsed);
       }
 
       return result;

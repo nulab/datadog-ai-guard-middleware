@@ -84,28 +84,14 @@ export class AIGuardMiddleware {
     params: LanguageModelV3CallOptions;
     model: LanguageModelV3;
   }): Promise<DoGenerateResult> {
-    this.#engine.logger.info(
-      "[AI Guard] wrapGenerate — start (prompt messages=%d)",
-      params.prompt.length,
-    );
     const baseMessages = await this.#evaluatePrompt(params.prompt);
 
     const result = await doGenerate();
 
     if (result.content.length > 0) {
-      const toolCalls = result.content.filter((item) => item.type === "tool-call");
-      if (toolCalls.length > 0) {
-        this.#engine.logger.info(
-          "[AI Guard] wrapGenerate — evaluating assistant turn with %d tool call(s)",
-          toolCalls.length,
-        );
-      } else {
-        this.#engine.logger.info("[AI Guard] wrapGenerate — evaluating assistant response");
-      }
       await this.#engine.evaluateAssistantResponse(result.content, baseMessages);
     }
 
-    this.#engine.logger.info("[AI Guard] wrapGenerate — done");
     return result;
   }
 
@@ -118,10 +104,6 @@ export class AIGuardMiddleware {
     params: LanguageModelV3CallOptions;
     model: LanguageModelV3;
   }): Promise<DoStreamResult> {
-    this.#engine.logger.info(
-      "[AI Guard] wrapStream — start (prompt messages=%d)",
-      params.prompt.length,
-    );
     const baseMessages = await this.#evaluatePrompt(params.prompt);
 
     const result = await doStream();
@@ -174,7 +156,6 @@ export class AIGuardMiddleware {
     });
 
     const wrappedStream = result.stream.pipeThrough(transform);
-    this.#engine.logger.info("[AI Guard] wrapStream — stream transform attached");
 
     return {
       ...result,
