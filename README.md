@@ -3,7 +3,7 @@
 [![CI](https://github.com/nulab/datadog-ai-guard-middleware/actions/workflows/ci.yml/badge.svg)](https://github.com/nulab/datadog-ai-guard-middleware/actions/workflows/ci.yml)
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](./LICENSE)
 
-[Vercel AI SDK](https://sdk.vercel.ai/) middleware that evaluates LLM prompts, assistant responses, and tool calls through [Datadog AI Guard](https://docs.datadoghq.com/llm_observability/ai_guard/), blocking requests based on Datadog's security policies.
+[Vercel AI SDK](https://sdk.vercel.ai/) middleware that evaluates LLM prompts, assistant responses, and tool calls through [Datadog AI Guard](https://docs.datadoghq.com/security/ai_guard/), blocking requests based on Datadog's security policies.
 
 ## Packages
 
