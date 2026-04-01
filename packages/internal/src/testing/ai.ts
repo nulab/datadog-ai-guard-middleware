@@ -128,7 +128,9 @@ export function defineAIGuardMiddlewareTests(deps: AIGuardMiddlewareTestDeps): v
 
         const doGenerate = vi.fn().mockResolvedValue({ content: [] });
 
-        await expect(callWrapGenerate(mw, doGenerate, { prompt: basePrompt })).rejects.toMatchObject({
+        await expect(
+          callWrapGenerate(mw, doGenerate, { prompt: basePrompt }),
+        ).rejects.toMatchObject({
           name: "AIGuardMiddlewareClientError",
         });
       });
@@ -272,7 +274,9 @@ export function defineAIGuardMiddlewareTests(deps: AIGuardMiddlewareTestDeps): v
       });
 
       it("AIGuardMiddlewareAbortError should not expose sensitive fields (security)", async () => {
-        evaluator.evaluate.mockRejectedValue(createSDKAbortError("Sensitive reason", ["injection"]));
+        evaluator.evaluate.mockRejectedValue(
+          createSDKAbortError("Sensitive reason", ["injection"]),
+        );
         middleware = new AIGuardMiddleware({ evaluator });
 
         try {

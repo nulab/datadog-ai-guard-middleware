@@ -16,7 +16,9 @@ export interface AIGuardEvaluationEngineOptions {
   buildAbortError: (kind: AIGuardKind) => Error;
 }
 
-export function normalizeAIGuardAction(action: unknown): tracer.aiguard.Evaluation["action"] | undefined {
+export function normalizeAIGuardAction(
+  action: unknown,
+): tracer.aiguard.Evaluation["action"] | undefined {
   return action === "ALLOW" || action === "DENY" || action === "ABORT" ? action : undefined;
 }
 

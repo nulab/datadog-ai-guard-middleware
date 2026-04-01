@@ -6,13 +6,13 @@ import type {
   LanguageModelV3StreamPart,
   LanguageModelV3StreamResult,
 } from "@ai-sdk/provider";
-import type tracer from "dd-trace";
 import type {
   AIGuardMessage,
   AIGuardMiddlewareOptions,
   ToolCallPartInput,
 } from "@nulab/datadog-ai-guard-middleware-core";
 import { AIGuardEvaluationEngine } from "@nulab/datadog-ai-guard-middleware-core";
+import type tracer from "dd-trace";
 import { convertToAIGuardFormat } from "./convert.js";
 import { AIGuardMiddlewareAbortError, markAsNonRetryable } from "./marker.js";
 
