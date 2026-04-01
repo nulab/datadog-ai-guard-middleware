@@ -6,14 +6,7 @@ import {
   extractToolResultContent,
 } from "@nulab/datadog-ai-guard-middleware-core";
 
-export type {
-  AIGuardMessage,
-  ToolCallPartInput,
-} from "@nulab/datadog-ai-guard-middleware-core";
-export {
-  convertAssistantContentToAIGuardMessages,
-  convertToolCallPart,
-} from "@nulab/datadog-ai-guard-middleware-core";
+export type { AIGuardMessage } from "@nulab/datadog-ai-guard-middleware-core";
 
 function convertMessage(message: LanguageModelV3Message): AIGuardMessage | AIGuardMessage[] {
   switch (message.role) {
