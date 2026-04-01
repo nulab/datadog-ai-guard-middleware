@@ -11,7 +11,7 @@
     "test": "pnpm -r run test",
     "test:coverage": "pnpm -r run test:coverage",
     "test:integration": "pnpm -r run test:integration",
-    "check": "biome check .",
+    "check": "biome check --diagnostic-level=error .",
     "check:fix": "biome check --write .",
     "lint": "biome lint .",
     "format": "biome format --write .",
