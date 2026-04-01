@@ -1,0 +1,39 @@
+{
+  "name": "@nulab/datadog-ai-guard-middleware-ai-v3",
+  "version": "0.0.0",
+  "type": "module",
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:integration": "vitest run --config vitest.integration.config.ts"
+  },
+  "dependencies": {
+    "@nulab/datadog-ai-guard-middleware-core": "workspace:*"
+  },
+  "peerDependencies": {
+    "@ai-sdk/provider": "^3.0.0"
+  },
+  "devDependencies": {
+    "@ai-sdk/openai": "^2.0.0",
+    "@ai-sdk/provider": "^3.0.0",
+    "@nulab/datadog-ai-guard-middleware-internal": "workspace:*",
+    "@types/node": "^25.5.0",
+    "ai": "^5.0.0"
+  }
+}

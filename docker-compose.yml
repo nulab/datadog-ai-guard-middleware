@@ -1,0 +1,14 @@
+services:
+  datadog-agent:
+    image: gcr.io/datadoghq/agent:latest
+    container_name: 'datadog-agent'
+    hostname: 'datadog-agent'
+    ports:
+      - '8126:8126'
+    environment:
+      DD_API_KEY: ${DD_API_KEY}
+      DD_APP_KEY: ${DD_APP_KEY}
+      DD_SITE: ${DD_SITE:-datadoghq.com}
+      DD_HOSTNAME: 'local-dev'
+      DD_APM_ENABLED: 'true'
+      DD_APM_NON_LOCAL_TRAFFIC: 'true'

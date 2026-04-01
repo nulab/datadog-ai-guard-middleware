@@ -1,0 +1,22 @@
+{
+  "name": "@nulab/datadog-ai-guard-middleware-internal",
+  "private": true,
+  "type": "module",
+  "license": "Apache-2.0",
+  "exports": {
+    "./testing": {
+      "import": {
+        "types": "./src/testing/index.ts",
+        "default": "./src/testing/index.ts"
+      }
+    }
+  },
+  "dependencies": {
+    "@nulab/datadog-ai-guard-middleware-core": "workspace:*"
+  },
+  "devDependencies": {
+    "@ai-sdk/openai": "^2.0.0",
+    "@types/node": "^25.5.0",
+    "ai": "^5.0.0"
+  }
+}
