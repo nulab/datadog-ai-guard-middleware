@@ -1,6 +1,13 @@
 packages:
-  - "packages/*"
+  - packages/*
+
+ignoredBuiltDependencies:
+  - '@datadog/native-appsec'
+  - '@datadog/native-iast-taint-tracking'
+  - '@datadog/native-metrics'
+  - '@datadog/pprof'
 
 minimumReleaseAge: 4320
 
-onlyBuiltDependencies: []
+onlyBuiltDependencies:
+  - dd-trace
