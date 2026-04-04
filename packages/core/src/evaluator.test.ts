@@ -118,6 +118,15 @@ describe("AIGuardEvaluationEngine", () => {
   }
 
   describe("evaluate", () => {
+    it("should return undefined for empty messages without calling evaluator", async () => {
+      const engine = createEngine();
+
+      const result = await engine.evaluate([], "Prompt");
+
+      expect(result).toBeUndefined();
+      expect(evaluator.evaluate).not.toHaveBeenCalled();
+    });
+
     it("should call evaluator with block: true", async () => {
       evaluator.evaluate.mockResolvedValue({ action: "ALLOW", reason: "", tags: [], sds: [] });
       const engine = createEngine();

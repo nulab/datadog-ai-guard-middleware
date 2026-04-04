@@ -136,6 +136,21 @@ export function defineAIGuardMiddlewareTests(deps: AIGuardMiddlewareTestDeps): v
       });
     });
 
+    describe("wrapGenerate - empty prompt early return", () => {
+      it("should skip all evaluation and return result when prompt is empty", async () => {
+        middleware = new AIGuardMiddleware({ evaluator });
+
+        const mockResult = { content: [{ type: "text", text: "Hello!" }] } as const;
+        const doGenerate = vi.fn().mockResolvedValue(mockResult);
+
+        const result = await callWrapGenerate(middleware, doGenerate, { prompt: [] });
+
+        expect(result).toStrictEqual(mockResult);
+        expect(doGenerate).toHaveBeenCalledTimes(1);
+        expect(evaluator.evaluate).not.toHaveBeenCalled();
+      });
+    });
+
     describe("wrapGenerate - prompt evaluation", () => {
       const prompt = [
         { role: "system", content: "You are a helpful assistant" },
@@ -601,6 +616,30 @@ export function defineAIGuardMiddlewareTests(deps: AIGuardMiddlewareTestDeps): v
         });
 
         expect(evaluator.evaluate).toHaveBeenCalledTimes(1);
+      });
+    });
+
+    describe("wrapStream - empty prompt early return", () => {
+      it("should skip all evaluation and pass through all chunks when prompt is empty", async () => {
+        middleware = new AIGuardMiddleware({ evaluator });
+
+        const doStream = createDoStreamMock([
+          { type: "text-delta", textDelta: "Checking..." },
+          {
+            type: "tool-call",
+            toolCallId: "call_1",
+            toolName: "getWeather",
+            input: JSON.stringify({ city: "Tokyo" }),
+          },
+          { type: "finish", finishReason: "stop" },
+        ]);
+
+        const result = await callWrapStream(middleware, doStream, { prompt: [] });
+
+        const chunks = await consumeStream(result.stream);
+
+        expect(chunks).toHaveLength(3);
+        expect(evaluator.evaluate).not.toHaveBeenCalled();
       });
     });
 

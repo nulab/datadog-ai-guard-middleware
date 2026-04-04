@@ -62,12 +62,20 @@ export class AIGuardMiddleware {
   }
 
   async #evaluatePrompt(prompt: LanguageModelV3Message[]): Promise<AIGuardMessage[] | undefined> {
+    if (!prompt.length) {
+      return undefined;
+    }
+
     const roles = prompt.map((m) => m.role);
     const meta = `roles=[${roles.join(",")}]`;
     const messages = this.#engine.convertOrHandleUnavailable("Prompt", meta, () =>
       convertToAIGuardFormat(prompt),
     );
     if (!messages) {
+      return undefined;
+    }
+
+    if (!messages.length) {
       return undefined;
     }
 

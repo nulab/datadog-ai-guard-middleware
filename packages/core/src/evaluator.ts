@@ -106,6 +106,10 @@ export class AIGuardEvaluationEngine {
     kind: AIGuardKind,
     meta?: string,
   ): Promise<tracer.aiguard.Evaluation | undefined> {
+    if (!messages.length) {
+      return undefined;
+    }
+
     const tag = this.#formatTag(kind, meta);
 
     const start = performance.now();
