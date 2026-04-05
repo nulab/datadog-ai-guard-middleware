@@ -4,6 +4,11 @@
   "description": "Internal shared core for @nulab/datadog-ai-guard-middleware-ai-v2 and @nulab/datadog-ai-guard-middleware-ai-v3. Not intended for direct use.",
   "type": "module",
   "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nulab/datadog-ai-guard-middleware",
+    "directory": "packages/core"
+  },
   "engines": {
     "node": ">=22"
   },
