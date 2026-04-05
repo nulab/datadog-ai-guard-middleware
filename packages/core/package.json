@@ -1,6 +1,6 @@
 {
   "name": "@nulab/datadog-ai-guard-middleware-core",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Internal shared core for @nulab/datadog-ai-guard-middleware-ai-v2 and @nulab/datadog-ai-guard-middleware-ai-v3. Not intended for direct use.",
   "type": "module",
   "license": "Apache-2.0",
