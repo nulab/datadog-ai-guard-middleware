@@ -73,7 +73,7 @@ try {
 ## Requirements
 
 - Node.js >= 22
-- [dd-trace](https://github.com/DataDog/dd-trace-js) >= 5.134.0 and < 6 with AI Guard enabled (`experimental.aiguard.enabled: true`)
+- [dd-trace](https://github.com/DataDog/dd-trace-js) `^5.134.0 || ^6.20.1` with AI Guard enabled (`experimental.aiguard.enabled: true`)
 - AI SDK v5 (`@ai-sdk/provider@^2`) or v6 (`@ai-sdk/provider@^3`)
 
 ## Contributing
