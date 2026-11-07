@@ -545,13 +545,12 @@ describe("AI Guard Core Convert", () => {
       expect(convertPromptContent(content)).toBe("Hello");
     });
 
-    it.each([
-      null,
-      undefined,
-      123,
-    ])("should return empty string for non-array non-string input: %s", (input) => {
-      expect(convertPromptContent(input)).toBe("");
-    });
+    it.each([null, undefined, 123])(
+      "should return empty string for non-array non-string input: %s",
+      (input) => {
+        expect(convertPromptContent(input)).toBe("");
+      },
+    );
   });
 
   describe("convertAssistantContentToAIGuardMessages", () => {
