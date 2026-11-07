@@ -80,7 +80,7 @@ try {
 
 ### Prerequisites
 
-- Node.js >= 22
+- Node.js 22.12+ (22.x) or 24.x for development and tests
 - [pnpm](https://pnpm.io/) (managed via [Corepack](https://nodejs.org/api/corepack.html))
 
 ### Setup
