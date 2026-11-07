@@ -95,12 +95,10 @@ export function defineAIGuardMiddlewareTests(deps: AIGuardMiddlewareTestDeps): v
 
     describe("constructor", () => {
       it("should throw TypeError if evaluator is not provided", () => {
-        // @ts-expect-error testing runtime validation
         expect(() => new AIGuardMiddleware({})).toThrow("AIGuardMiddleware: evaluator is required");
       });
 
       it("should throw TypeError if evaluator is undefined", () => {
-        // @ts-expect-error testing runtime validation
         expect(() => new AIGuardMiddleware({ evaluator: undefined })).toThrow(
           "AIGuardMiddleware: evaluator is required",
         );

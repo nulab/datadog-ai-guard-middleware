@@ -1,12 +1,22 @@
-import { openai } from "@ai-sdk/openai";
-import { generateText, jsonSchema, stepCountIs, streamText, tool, wrapLanguageModel } from "ai";
+import type { AIGuardEvaluator } from "@nulab/datadog-ai-guard-middleware-core";
 import { beforeAll, describe, expect, it } from "vitest";
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 export interface IntegrationTestDeps {
-  AIGuardMiddleware: new (opts: any) => any;
-  AIGuardEvaluator: any;
+  generate(
+    evaluator: AIGuardEvaluator,
+    toolCall: boolean,
+  ): Promise<{
+    text: string;
+    toolNames: string[];
+    stepCount: number;
+  }>;
+  stream(
+    evaluator: AIGuardEvaluator,
+    toolCall: boolean,
+  ): Promise<{
+    text: string;
+    toolNames: string[];
+  }>;
 }
 
 const hasCredentials = !!(
@@ -15,143 +25,36 @@ const hasCredentials = !!(
   process.env.OPENAI_API_KEY
 );
 
-const SYSTEM_PROMPT = [
-  "You are a helpful time assistant.",
-  "When the user asks about the current time, you MUST call the getCurrentTime tool.",
-  "After receiving the tool result, respond with the time in a natural sentence.",
-].join(" ");
-
-const timeTools = {
-  getCurrentTime: tool({
-    description: "Get the current time in a specific timezone",
-    inputSchema: jsonSchema<{ timezone: string }>(
-      {
-        type: "object",
-        properties: {
-          timezone: {
-            type: "string",
-            description: "IANA timezone identifier, e.g. Asia/Tokyo",
-          },
-        },
-        required: ["timezone"],
-      },
-      {
-        validate: (value) => ({
-          success: true,
-          value: value as { timezone: string },
-        }),
-      },
-    ),
-    execute: async ({ timezone }) => {
-      return {
-        timezone,
-        time: new Date().toLocaleString("en-US", { timeZone: timezone }),
-      };
-    },
-  }),
-};
-
 export function defineIntegrationTests(deps: IntegrationTestDeps): void {
-  const { AIGuardMiddleware } = deps;
-
   describe.skipIf(!hasCredentials)("AIGuardMiddleware integration (OpenAI)", () => {
-    let evaluator: any;
+    let evaluator: AIGuardEvaluator;
 
     beforeAll(async () => {
       const ddtracer = await import("dd-trace");
-      ddtracer.default.init({
-        experimental: { aiguard: { enabled: true } },
-      });
-      evaluator = ddtracer.default.aiguard;
+      ddtracer.default.init({ experimental: { aiguard: { enabled: true } } });
+      // The core message type is wider than dd-trace's discriminated message union.
+      evaluator = ddtracer.default.aiguard as AIGuardEvaluator;
     });
 
     it("generateText: safe prompt passes through AI Guard", async () => {
-      const middleware = new AIGuardMiddleware({ evaluator });
-      const model = wrapLanguageModel({
-        model: openai.chat("gpt-4o-mini"),
-        middleware: [middleware],
-      });
-
-      const result = await generateText({
-        model,
-        system: SYSTEM_PROMPT,
-        prompt: "Say hello in one word.",
-      });
-
-      expect(result.text).toBeTruthy();
+      expect((await deps.generate(evaluator, false)).text).toBeTruthy();
     });
 
     it("generateText: agent tool call is evaluated by AI Guard", async () => {
-      const middleware = new AIGuardMiddleware({ evaluator });
-      const model = wrapLanguageModel({
-        model: openai.chat("gpt-4o-mini"),
-        middleware: [middleware],
-      });
-
-      const result = await generateText({
-        model,
-        system: SYSTEM_PROMPT,
-        prompt: "What time is it in Tokyo?",
-        tools: timeTools,
-        stopWhen: stepCountIs(5),
-      });
-
-      const toolStep = result.steps.find((step) => step.toolCalls.length > 0);
-      expect(toolStep).toBeTruthy();
-      expect(toolStep!.toolCalls[0].toolName).toBe("getCurrentTime");
-
-      expect(result.steps.length).toBeGreaterThanOrEqual(2);
+      const result = await deps.generate(evaluator, true);
+      expect(result.toolNames).toContain("getCurrentTime");
+      expect(result.stepCount).toBeGreaterThanOrEqual(2);
       expect(result.text).toBeTruthy();
     });
 
     it("streamText: safe prompt passes through AI Guard", async () => {
-      const middleware = new AIGuardMiddleware({ evaluator });
-      const model = wrapLanguageModel({
-        model: openai.chat("gpt-4o-mini"),
-        middleware: [middleware],
-      });
-
-      const result = streamText({
-        model,
-        system: SYSTEM_PROMPT,
-        prompt: "Say hello in one word.",
-      });
-
-      let text = "";
-      for await (const part of result.textStream) {
-        text += part;
-      }
-
-      expect(text).toBeTruthy();
+      expect((await deps.stream(evaluator, false)).text).toBeTruthy();
     });
 
     it("streamText: agent tool call is evaluated by AI Guard", async () => {
-      const middleware = new AIGuardMiddleware({ evaluator });
-      const model = wrapLanguageModel({
-        model: openai.chat("gpt-4o-mini"),
-        middleware: [middleware],
-      });
-
-      const result = streamText({
-        model,
-        system: SYSTEM_PROMPT,
-        prompt: "What time is it in Tokyo?",
-        tools: timeTools,
-        stopWhen: stepCountIs(5),
-      });
-
-      const chunks: unknown[] = [];
-      for await (const part of result.fullStream) {
-        chunks.push(part);
-      }
-
-      const toolCallChunk = chunks.find((c) => (c as { type: string }).type === "tool-call");
-      expect(toolCallChunk).toBeTruthy();
-
-      const textChunk = chunks.find((c) => (c as { type: string }).type === "text-delta");
-      expect(textChunk).toBeTruthy();
+      const result = await deps.stream(evaluator, true);
+      expect(result.toolNames).toContain("getCurrentTime");
+      expect(result.text).toBeTruthy();
     });
   });
 }
-
-/* eslint-enable @typescript-eslint/no-explicit-any */

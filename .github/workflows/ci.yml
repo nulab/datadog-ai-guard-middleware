@@ -88,5 +88,8 @@ jobs:
       - name: Build
         run: pnpm run build
 
+      - name: Check SDK connection types
+        run: pnpm --filter ./packages/${{ matrix.package }} --if-present run test:types
+
       - name: Test with coverage (${{ matrix.package }} / Node ${{ matrix.node-version }})
         run: pnpm --filter ./packages/${{ matrix.package }} run test:coverage
