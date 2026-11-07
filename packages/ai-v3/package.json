@@ -27,7 +27,8 @@
     "build": "pnpm run clean && tsc",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
-    "test:integration": "vitest run --config vitest.integration.config.ts"
+    "test:integration": "vitest run --config vitest.integration.config.ts",
+    "test:types": "tsc -p tsconfig.sdk.json"
   },
   "dependencies": {
     "@nulab/datadog-ai-guard-middleware-core": "workspace:*"
@@ -36,10 +37,10 @@
     "@ai-sdk/provider": "^3.0.0"
   },
   "devDependencies": {
-    "@ai-sdk/openai": "^2.0.0",
-    "@ai-sdk/provider": "^3.0.0",
+    "@ai-sdk/openai": "^3.0.136",
+    "@ai-sdk/provider": "^3.0.19",
     "@nulab/datadog-ai-guard-middleware-internal": "workspace:*",
     "@types/node": "^22.20.5",
-    "ai": "^5.0.0"
+    "ai": "^6.0.322"
   }
 }

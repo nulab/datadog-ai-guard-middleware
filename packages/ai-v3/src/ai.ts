@@ -3,6 +3,7 @@ import type {
   LanguageModelV3CallOptions,
   LanguageModelV3GenerateResult,
   LanguageModelV3Message,
+  LanguageModelV3Middleware,
   LanguageModelV3StreamPart,
   LanguageModelV3StreamResult,
 } from "@ai-sdk/provider";
@@ -33,7 +34,9 @@ type DoStreamResult = LanguageModelV3StreamResult;
 
 // NOTE: async/await is required by Vercel AI SDK middleware interface
 /** AI Guard middleware for Vercel AI SDK (LanguageModelV3Middleware compatible). */
-export class AIGuardMiddleware {
+export class AIGuardMiddleware implements LanguageModelV3Middleware {
+  readonly specificationVersion = "v3";
+
   #engine: AIGuardEvaluationEngine;
 
   constructor(options: AIGuardMiddlewareOptions) {

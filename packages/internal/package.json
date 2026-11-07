@@ -16,8 +16,6 @@
     "@nulab/datadog-ai-guard-middleware-core": "workspace:*"
   },
   "devDependencies": {
-    "@ai-sdk/openai": "^2.0.0",
-    "@types/node": "^22.20.5",
-    "ai": "^5.0.0"
+    "@types/node": "^22.20.5"
   }
 }

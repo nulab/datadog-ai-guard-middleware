@@ -15,7 +15,8 @@
     "check:fix": "biome check --write .",
     "lint": "biome lint .",
     "format": "biome format --write .",
-    "changeset": "changeset"
+    "changeset": "changeset",
+    "test:types": "pnpm -r --if-present run test:types"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.6.4",
