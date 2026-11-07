@@ -30,7 +30,7 @@
     "test:coverage": "vitest run --coverage"
   },
   "peerDependencies": {
-    "dd-trace": "^5.0.0"
+    "dd-trace": "^5.134.0"
   },
   "devDependencies": {
     "@types/node": "^22.20.5"

@@ -170,7 +170,7 @@ interface AIGuardMiddlewareOptions {
 
 - Node.js >= 22
 - `@ai-sdk/provider` ^2.0.0
-- [dd-trace](https://github.com/DataDog/dd-trace-js) >= 5 with AI Guard enabled
+- [dd-trace](https://github.com/DataDog/dd-trace-js) >= 5.134.0 and < 6 with AI Guard enabled
 
 ## License
 
