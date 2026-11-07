@@ -1,5 +1,12 @@
 # @nulab/datadog-ai-guard-middleware-ai-v2
 
+## 0.1.2
+
+### Patch Changes
+
+- Updated dependencies [[`faaea15`](https://github.com/nulab/datadog-ai-guard-middleware/commit/faaea15e6ada4420e6b0601bd0dbb021c6928e09), [`a485e49`](https://github.com/nulab/datadog-ai-guard-middleware/commit/a485e49d99e2586848c17c4b6dd95555d28a2af5)]:
+  - @nulab/datadog-ai-guard-middleware-core@0.1.2
+
 ## 0.1.1
 
 ### Patch Changes
