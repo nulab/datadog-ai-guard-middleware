@@ -9,6 +9,7 @@
 
 | Package | Version | Description |
 |---------|---------|-------------|
+| [`@nulab/datadog-ai-guard-middleware-ai-v4`](./packages/ai-v4) | [![npm](https://img.shields.io/npm/v/@nulab/datadog-ai-guard-middleware-ai-v4.svg)](https://www.npmjs.com/package/@nulab/datadog-ai-guard-middleware-ai-v4) | AI SDK v7 (`@ai-sdk/provider@^4.0.35`) |
 | [`@nulab/datadog-ai-guard-middleware-ai-v3`](./packages/ai-v3) | [![npm](https://img.shields.io/npm/v/@nulab/datadog-ai-guard-middleware-ai-v3.svg)](https://www.npmjs.com/package/@nulab/datadog-ai-guard-middleware-ai-v3) | AI SDK v6 (`@ai-sdk/provider@^3`) |
 | [`@nulab/datadog-ai-guard-middleware-ai-v2`](./packages/ai-v2) | [![npm](https://img.shields.io/npm/v/@nulab/datadog-ai-guard-middleware-ai-v2.svg)](https://www.npmjs.com/package/@nulab/datadog-ai-guard-middleware-ai-v2) | AI SDK v5 (`@ai-sdk/provider@^2`) |
 | [`@nulab/datadog-ai-guard-middleware-core`](./packages/core) | [![npm](https://img.shields.io/npm/v/@nulab/datadog-ai-guard-middleware-core.svg)](https://www.npmjs.com/package/@nulab/datadog-ai-guard-middleware-core) | AI SDK-independent core logic |
@@ -17,7 +18,8 @@
 
 | Your AI SDK version | Install |
 |---------------------|---------|
-| AI SDK **v6** (latest, `@ai-sdk/provider@^3`) | `@nulab/datadog-ai-guard-middleware-ai-v3` |
+| AI SDK **v7** (`@ai-sdk/provider@^4.0.35`) | `@nulab/datadog-ai-guard-middleware-ai-v4` |
+| AI SDK **v6** (`@ai-sdk/provider@^3`) | `@nulab/datadog-ai-guard-middleware-ai-v3` |
 | AI SDK **v5** (`@ai-sdk/provider@^2`) | `@nulab/datadog-ai-guard-middleware-ai-v2` |
 
 > `@nulab/datadog-ai-guard-middleware-core` does not need to be installed directly. It is automatically installed as an internal dependency of the middleware packages.
@@ -27,7 +29,7 @@
 ### Installation
 
 ```bash
-npm install @nulab/datadog-ai-guard-middleware-ai-v3
+npm install @nulab/datadog-ai-guard-middleware-ai-v4 @ai-sdk/provider@^4.0.35
 ```
 
 ### Usage
@@ -37,9 +39,10 @@ import ddtracer from "dd-trace";
 import { generateText, wrapLanguageModel } from "ai";
 import { openai } from "@ai-sdk/openai";
 import {
+  type AIGuardEvaluator,
   AIGuardMiddleware,
   AIGuardMiddlewareAbortError,
-} from "@nulab/datadog-ai-guard-middleware-ai-v3";
+} from "@nulab/datadog-ai-guard-middleware-ai-v4";
 
 // Initialize dd-trace with AI Guard enabled
 ddtracer.init({
@@ -48,16 +51,20 @@ ddtracer.init({
   },
 });
 
+// Match the core evaluator interface used by the middleware.
+const evaluator = ddtracer.aiguard as AIGuardEvaluator;
+
 // Create a guarded model
 const guardedModel = wrapLanguageModel({
   model: openai("gpt-4o"),
-  middleware: [new AIGuardMiddleware({ evaluator: ddtracer.aiguard })],
+  middleware: [new AIGuardMiddleware({ evaluator })],
 });
 
 // Use it with generateText / streamText
 try {
   const { text } = await generateText({
     model: guardedModel,
+    instructions: "Be concise.",
     prompt: "Hello!",
   });
   console.log(text);
@@ -68,13 +75,13 @@ try {
 }
 ```
 
-> For detailed usage including streaming, error handling, and all configuration options, see the package README for [ai-v3](./packages/ai-v3) or [ai-v2](./packages/ai-v2).
+> For detailed usage including streaming, error handling, and all configuration options, see the package README for [ai-v4](./packages/ai-v4), [ai-v3](./packages/ai-v3), or [ai-v2](./packages/ai-v2).
 
 ## Requirements
 
 - Node.js >= 22
 - [dd-trace](https://github.com/DataDog/dd-trace-js) `^5.134.0 || ^6.20.1` with AI Guard enabled (`experimental.aiguard.enabled: true`)
-- AI SDK v5 (`@ai-sdk/provider@^2`) or v6 (`@ai-sdk/provider@^3`)
+- AI SDK v5 (`@ai-sdk/provider@^2`), v6 (`@ai-sdk/provider@^3`), or v7 (`@ai-sdk/provider@^4.0.35`)
 
 ## Contributing
 
