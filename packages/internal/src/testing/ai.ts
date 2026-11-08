@@ -11,6 +11,7 @@ export interface AIGuardMiddlewareTestDeps {
   AIGuardMiddleware: new (opts: any) => any;
   AIGuardMiddlewareAbortError: new (...args: any[]) => any;
   castCallOptions: (opts: any) => any;
+  imageData?: unknown;
 }
 
 function createSDKAbortError(reason: string, tags?: string[]): Error {
@@ -187,7 +188,7 @@ export function defineAIGuardMiddlewareTests(deps: AIGuardMiddlewareTestDeps): v
                 {
                   type: "file",
                   mediaType: "image/png",
-                  data: "https://example.com/cat.png",
+                  data: deps.imageData ?? "https://example.com/cat.png",
                 },
               ],
             },
