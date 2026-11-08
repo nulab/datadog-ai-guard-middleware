@@ -1,5 +1,11 @@
 # @nulab/datadog-ai-guard-middleware-ai-v4
 
+## 0.1.1
+
+### Patch Changes
+
+- [#12](https://github.com/nulab/datadog-ai-guard-middleware/pull/12) [`f4f4532`](https://github.com/nulab/datadog-ai-guard-middleware/commit/f4f45326b33dfd07927d5c850ae22e302625e969) Thanks [@vvatanabe](https://github.com/vvatanabe)! - Publish the AI SDK v7 adapter through GitHub Actions to validate npm trusted publishing and generate provenance. No runtime behavior changes.
+
 ## 0.1.0
 
 ### Minor Changes
